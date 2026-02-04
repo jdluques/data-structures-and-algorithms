@@ -1,0 +1,19 @@
+.env
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+.vscode-test/
+.history/
+
+# Rust
+debug
+target
+**/*.rs.bk
+*.pdb
+**/mutants.out*/
