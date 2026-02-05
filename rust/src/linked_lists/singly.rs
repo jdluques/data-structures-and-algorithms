@@ -3,7 +3,7 @@ use core::ptr::NonNull;
 use super::node::SinglyNode as Node;
 
 pub struct SinglyList<T> {
-    head: Box<Node<T>>,
+    sentinel: Box<Node<T>>,
     tail: NonNull<Node<T>>,
     size: usize,
 }
@@ -14,7 +14,7 @@ impl<T: Default> SinglyList<T> {
         let sentinel_ptr = NonNull::from(sentinel.as_mut());
 
         SinglyList {
-            head: sentinel,
+            sentinel: sentinel,
             tail: sentinel_ptr,
             size: 0,
         }
@@ -41,10 +41,10 @@ impl<T: Default> SinglyList<T> {
     }
 
     pub fn push_front(&mut self, value: T) {
-        let mut new_node = Box::new(Node::new(value, self.head.next.take()));
+        let mut new_node = Box::new(Node::new(value, self.sentinel.next.take()));
         let new_node_ptr = NonNull::from(new_node.as_mut());
 
-        self.head.next = Some(new_node);
+        self.sentinel.next = Some(new_node);
         if self.size == 0 {
             self.tail = new_node_ptr;
         }
@@ -62,7 +62,7 @@ impl<T: Default> SinglyList<T> {
         } else if pos == self.size {
             self.push_back(value);
         } else {
-            let mut curr = self.head.as_mut();
+            let mut curr = self.sentinel.as_mut();
             for _ in 0..pos {
                 curr = curr.next.as_mut().unwrap().as_mut();
             }
@@ -78,7 +78,7 @@ impl<T: Default> SinglyList<T> {
         match self.size {
             0 | 1 => self.pop_front(),
             _ => {
-                let mut curr = self.head.as_mut();
+                let mut curr = self.sentinel.as_mut();
                 for _ in 0..self.size - 1 {
                     curr = curr.next.as_mut().unwrap().as_mut();
                 }
@@ -99,13 +99,13 @@ impl<T: Default> SinglyList<T> {
             return None;
         }
 
-        let mut first_node = self.head.next.take().unwrap();
-        self.head.next = first_node.next.take();
+        let mut first_node = self.sentinel.next.take().unwrap();
+        self.sentinel.next = first_node.next.take();
 
         self.size -= 1;
 
         if self.len() == 0 {
-            self.tail = NonNull::from(self.head.as_mut());
+            self.tail = NonNull::from(self.sentinel.as_mut());
         }
 
         Some(first_node.value)
@@ -121,7 +121,7 @@ impl<T: Default> SinglyList<T> {
         } else if pos == self.size - 1 {
             self.pop_back()
         } else {
-            let mut curr = self.head.as_mut();
+            let mut curr = self.sentinel.as_mut();
             for _ in 0..pos {
                 curr = curr.next.as_mut().unwrap().as_mut();
             }
@@ -145,7 +145,7 @@ impl<T: Default> SinglyList<T> {
                 self.tail.as_mut().value = value;
             }
         } else {
-            let mut curr = self.head.as_mut();
+            let mut curr = self.sentinel.as_mut();
             for _ in 0..pos {
                 curr = curr.next.as_mut().unwrap().as_mut();
             }
@@ -172,14 +172,14 @@ impl<T: Default> SinglyList<T> {
         if self.size == 0 {
             return None;
         }
-        Some(&self.head.next.as_ref().unwrap().value)
+        Some(&self.sentinel.next.as_ref().unwrap().value)
     }
 
     pub fn peek_front_mut(&mut self) -> Option<&mut T> {
         if self.size == 0 {
             return None;
         }
-        Some(&mut self.head.next.as_mut().unwrap().value)
+        Some(&mut self.sentinel.next.as_mut().unwrap().value)
     }
 
     pub fn get(&self, pos: usize) -> Option<&T> {
@@ -192,7 +192,7 @@ impl<T: Default> SinglyList<T> {
         } else if pos == self.size - 1 {
             self.peek_front()
         } else {
-            let mut curr = self.head.as_ref();
+            let mut curr = self.sentinel.as_ref();
             for _ in 0..pos {
                 curr = curr.next.as_ref().unwrap().as_ref();
             }
@@ -211,7 +211,7 @@ impl<T: Default> SinglyList<T> {
         } else if pos == self.size - 1 {
             self.peek_front_mut()
         } else {
-            let mut curr = self.head.as_mut();
+            let mut curr = self.sentinel.as_mut();
             for _ in 0..pos {
                 curr = curr.next.as_mut().unwrap().as_mut();
             }
