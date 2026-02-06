@@ -1,0 +1,10 @@
+package singlylists
+
+type node[T any] struct {
+	value T
+	next  *node[T]
+}
+
+func newNode[T any](value T, next *node[T]) *node[T] {
+	return &node[T]{value, next}
+}
