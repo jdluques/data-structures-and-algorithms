@@ -213,3 +213,68 @@ template <typename T>
 void SinglyLinkedList<T>::clear() {
     while (!empty()) pop_front();
 }
+
+// ### Sort method and helpers ###
+
+template <typename T>
+void SinglyLinkedList<T>::sort() {
+    head_ = sortList(head_);
+}
+
+template <typename T>
+SinglyLinkedList<T>::Node*
+SinglyLinkedList<T>::sortList(Node* head) {
+    if (!head || !head->next) return head;
+
+    Node* middle = findMiddle(head);
+    Node* rightHead = middle->next;
+    middle->next = nullptr;
+
+    Node* sortedLeftHead = sortList(head);
+    Node* sortedRightHead = sortList(rightHead);
+
+    return merge(sortedLeftHead, sortedRightHead);
+}
+
+template <typename T>
+SinglyLinkedList<T>::Node*
+SinglyLinkedList<T>::merge(Node* head1, Node* head2) {
+    Node* dummy = new Node(T());
+    Node* curr = dummy;
+
+    while (head1 && head2) {
+        if (head1->value <= head2->data) {
+            curr->next = head1;
+            head1 = head1->next;
+        } else {
+            curr->next = head2;
+            head2 = head2->next;
+        }
+
+        curr = curr->next;
+    }
+
+    if (head1) curr->next = head1;
+    else if (head2) curr->next = head2;
+
+    Node* sortedHead = dummy->next;
+    delete dummy;
+
+    return sortedHead;
+}
+
+template <typename T>
+SinglyLinkedList<T>::Node*
+SinglyLinkedList<T>::findMiddle(Node* head) {
+    if (!head) return nullptr;
+
+    Node* slow = head;
+    Node* fast = head->next;
+
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}

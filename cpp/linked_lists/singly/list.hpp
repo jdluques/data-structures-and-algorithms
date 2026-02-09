@@ -10,12 +10,20 @@ private:
         Node* next = nullptr;
 
         explicit Node(const T& v, Node* n = nullptr) : value(v), next(n) {}
+
+        bool operator<(const Node& other) const {
+            return this->value < other.value;
+        }
     };
 
     Node* head_ = nullptr;
     Node* tail_ = nullptr;
     std::size_t size_ = 0;
 
+    // Sort helpers
+    Node* sortList(Node* head);
+    Node* merge(Node* head1, Node* head2);
+    Node* findMiddle(Node* head);
 public:
     class iterator {
     private:
@@ -101,4 +109,6 @@ public:
     void erase(std::size_t pos);
 
     void clear();
+
+    void sort();
 };
