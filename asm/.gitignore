@@ -1,0 +1,26 @@
+# CMake build files and directories
+# General build directory convention (e.g., if you use a 'build' folder)
+/build/
+/out/
+/cmake-build-*/
+
+# IDE specific files
+.idea/      # JetBrains CLion, IntelliJ, etc.
+.vs/        # Visual Studio cache/options directory
+.vscode/    # Visual Studio Code cache
+*.swp       # Vim swap files
+
+# Operating System generated files
+.DS_Store   # macOS Finder files
+*.exe       # Executables (Windows)
+*.out       # Executables (Linux/macOS default)
+*.bin       # Binaries
+*.map       # Map files
+*.obj       # Object files
+*.o         # Object files
+*.lib       # Library files
+*.dll       # Dynamic libraries
+
+# Temporary or log files
+*.log
+*.tmp
