@@ -7,7 +7,7 @@
 template <typename T>
 SinglyLinkedList<T>::iterator
 SinglyLinkedList<T>::begin() const noexcept {
-    return iterator(head_);
+    return iterator(sentinel_);
 }
 
 template <typename T>
@@ -19,7 +19,7 @@ SinglyLinkedList<T>::end() const noexcept {
 template <typename T>
 SinglyLinkedList<T>::const_iterator
 SinglyLinkedList<T>::cbegin() const noexcept {
-    return const_iterator(head_);
+    return const_iterator(sentinel_);
 }
 
 template <typename T>
@@ -32,14 +32,15 @@ SinglyLinkedList<T>::cend() const noexcept {
 
 template <typename T>
 SinglyLinkedList<T>::SinglyLinkedList(const SinglyLinkedList& other) {
-    for (Node* n = other.head_; n; n = n->next) {
-        push_back(n->value);
+    for (Node* n = other.sentinel_; n; n = n->next) {
+        this->push_back(n->value);
     }
 }
 
 template <typename T>
-SinglyLinkedList<T>::SinglyLinkedList(SinglyLinkedList&& other) noexcept : head_(other.head_), size_(other.size_) {
-    other.head_ = nullptr;
+SinglyLinkedList<T>::SinglyLinkedList(SinglyLinkedList&& other) noexcept : sentinel_(other.sentinel_), tail_(other.tail_), size_(other.size_) {
+    other.sentinel_ = nullptr;
+    other.tail_ = nullptr;
     other.size_ = 0;
 }
 
@@ -53,8 +54,8 @@ SinglyLinkedList<T>::~SinglyLinkedList() noexcept { clear(); }
 template <typename T>
 SinglyLinkedList<T>& SinglyLinkedList<T>::operator=(SinglyLinkedList& other) {
     if (this != &other) {
-        clear();
-        for (Node* n = other.head_; n; n = n->next) push_back(n->value);
+        this->clear();
+        for (Node* n = other.sentinel_; n; n = n->next) this->push_back(n->value);
     }
     return *this;
 }
@@ -63,10 +64,12 @@ template <typename T>
 SinglyLinkedList<T>& SinglyLinkedList<T>::operator=(SinglyLinkedList&& other) {
     if (this != &other) {
         clear();
-        head_ = other.head_;
-        size_ = other.size_;
+        this->sentinel_ = other.sentinel_;
+        this->tail_ = other.tail_;
+        this->size_ = other.size_;
 
-        other.head_ = nullptr;
+        other.sentinel_ = nullptr;
+        other.tail_ = nullptr;
         other.size_ = 0;
     }
     return *this;
@@ -78,46 +81,51 @@ template <typename T>
 std::size_t SinglyLinkedList<T>::size() const noexcept { return size_; }
 
 template <typename T>
-bool SinglyLinkedList<T>::empty() const noexcept { return size() == 0; }
+bool SinglyLinkedList<T>::empty() const noexcept { return size_ == 0; }
 
 // ### Element access methods ###
 
 template <typename T>
 T& SinglyLinkedList<T>::front() const {
     if (empty()) throw std::out_of_range("front on empty list");
-    return head_->value;
+    return sentinel_->value;
 }
 
 template <typename T>
 T& SinglyLinkedList<T>::back() const {
     if (empty()) throw std::out_of_range("back on empty list");
-    
-    Node* curr = head_;
-    while (curr->next) curr = curr->next;
-    return curr->value;
+    return tail_->value;
 }
 
 template <typename T>
 T& SinglyLinkedList<T>::at(std::size_t pos) const {
-    if (pos > size()) throw std::out_of_range("at pos out of range");
+    if (pos >= size_) throw std::out_of_range("at pos out of range");
     
-    Node* curr = head_;
-    while (pos--) curr = curr->next;
-    return curr->value;
+    if (pos == 0) return front();
+    else if (pos == size_-1) return back();
+    else {
+        Node* curr = sentinel_;
+        while (pos--) curr = curr->next;
+        return curr->value;
+    }
 }
 
 template <typename T>
 T& SinglyLinkedList<T>::operator[](std::size_t pos) const {
     if (pos > size()) throw std::out_of_range("[pos] out of range");
     
-    Node* curr = head_;
-    while (pos--) curr = curr->next;
-    return curr->value;
+    if (pos == 0) return front();
+    else if (pos == size_-1) return back();
+    else {
+        Node* curr = sentinel_;
+        while (pos--) curr = curr->next;
+        return curr->value;
+    }
 }
 
 template <typename T>
 SinglyLinkedList<T>::Node* SinglyLinkedList<T>::find(const T& value) const {
-    for (Node* curr = head_; curr; curr = curr->next) {
+    for (Node* curr = sentinel_; curr; curr = curr->next) {
         if (curr->value == value) return curr;
     }
     return nullptr;
@@ -127,20 +135,15 @@ SinglyLinkedList<T>::Node* SinglyLinkedList<T>::find(const T& value) const {
 
 template <typename T>
 void SinglyLinkedList<T>::push_front(const T& value) {
-    head_ = new Node(value, head_);
-    if (!tail_) tail_ = head_;
+    sentinel_->next = new Node(value, sentinel_->next);
+    if (size_ == 0) tail_ = sentinel_->next;
     size_++;
 }
 
 template <typename T>
 void SinglyLinkedList<T>::push_back(const T& value) {
-    if (tail_) {
-        tail_->next = new Node(value);
-        tail_ = tail_->next;
-    } else {
-        tail_ = head_ = new Node(value);
-    }
-
+    tail_->next = new Node(value);
+    tail_ = tail_->next;
     size_++;
 }
 
@@ -151,8 +154,8 @@ void SinglyLinkedList<T>::insert(const T& value, std::size_t pos) {
     if (pos == 0) this->push_front(value);
     else if (pos == size()) this->push_back(value);
     else {
-        Node* curr = head_;
-        while (--pos) curr = curr->next;
+        Node* curr = sentinel_;
+        while (pos--) curr = curr->next;
 
         Node* newNode = new Node(value, curr->next);
         curr->next = newNode;
@@ -162,63 +165,72 @@ void SinglyLinkedList<T>::insert(const T& value, std::size_t pos) {
 }
 
 template <typename T>
-void SinglyLinkedList<T>::pop_front() {
+T& SinglyLinkedList<T>::pop_front() {
     if (empty()) throw std::out_of_range("pop_front on empty list");
 
-    Node* oldHead = head_;
-    head_ = head_->next;
-    delete oldHead;
+    Node* prevFront = sentinel_->next;
+    T* prevFrontValue = prevFront->value;
+    sentinel_->next = prevFront->next;
+    if (prevFront == tail_) tail_ = sentinel_;
+    delete prevFront;
+
     size_--;
 
-    if (empty()) tail_ = nullptr;
+    return prevFrontValue;
 }
 
 template <typename T>
-void SinglyLinkedList<T>::pop_back() {
+T& SinglyLinkedList<T>::pop_back() {
     if (empty()) throw std::out_of_range("pop_back on empty list");
 
-    if (size() == 1) {
-        delete head_;
-        head_ = tail_ = nullptr;
-    } else {
-        Node* curr = head_;
-        while (curr->next != tail_) curr = curr->next;
-        delete tail_;
-        tail_ = curr;
-        tail_->next = nullptr;
-    }
+    Node* curr = sentinel_;
+    while (curr->next != tail_) curr = curr->next;
 
+    T* prevTailValue = tail_->value;
+    delete tail_;
+    tail_ = curr;
+    tail_->next = nullptr;
+    
     size_--;
+
+    return prevTailValue;
 }
 
 template <typename T>
-void SinglyLinkedList<T>::erase(std::size_t pos) {
+T& SinglyLinkedList<T>::erase(std::size_t pos) {
     if (pos > size()) throw std::out_of_range("erase pos out of range");
 
-    if (pos == 0) this->pop_front();
-    else if (pos == size()-1) this->pop_back();
+    if (pos == 0) return this->pop_front();
+    else if (pos == size()-1) return this->pop_back();
     else {
-        Node* curr = head_;
-        while (--pos) curr = curr->next;
+        Node* curr = sentinel_;
+        while (pos--) curr = curr->next;
 
         Node* nodeToDelete = curr->next;
+        T* deletedNodeValue = nodeToDelete->value;
         curr->next = nodeToDelete->next;
         delete nodeToDelete;
 
         size_--;
+
+        return deletedNodeValue;
     }
 }
 
 template <typename T>
 void SinglyLinkedList<T>::clear() {
-    while (!empty()) pop_front();
+    while (size_ != 0) pop_front();
 }
 
 // ### Sort method and helpers ###
 
 template <typename T>
 void SinglyLinkedList<T>::sort() {
-    head_ = sortList(head_);
+    sentinel_ = sortList(sentinel_->next);
+
+    Node* curr = sentinel_;
+    while (curr && curr->next) curr = curr->next;
+    tail_ = curr;
 }
 
 template <typename T>

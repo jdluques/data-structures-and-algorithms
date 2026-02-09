@@ -16,7 +16,7 @@ private:
         }
     };
 
-    Node* head_ = nullptr;
+    Node* sentinel_ = nullptr;
     Node* tail_ = nullptr;
     std::size_t size_ = 0;
 
@@ -104,9 +104,9 @@ public:
     void push_back(const T& value);
     void insert(const T& value, std::size_t pos);
 
-    void pop_front();
-    void pop_back();
-    void erase(std::size_t pos);
+    T& pop_front();
+    T& pop_back();
+    T& erase(std::size_t pos);
 
     void clear();
 
