@@ -1,0 +1,105 @@
+# ==============================================================================
+# Global defaults
+# ==============================================================================
+# Normalize line endings across OSes
+* text=auto
+
+# ==============================================================================
+# C code (everything under c/)
+# ==============================================================================
+c/**/*.c    text eol=lf linguist-language=C
+c/**/*.h    text eol=lf linguist-language=C
+
+# ==============================================================================
+# C++ code (everything under cpp/)
+# ==============================================================================
+# Source files
+cpp/**/*.cpp text eol=lf linguist-language=C++
+
+# Headers (may live directly in include/)
+cpp/**/*.hpp text eol=lf linguist-language=C++
+cpp/**/*.h   text eol=lf linguist-language=C++
+
+# Inline / template implementation files
+cpp/**/*.inl text eol=lf linguist-language=C++
+
+# ==============================================================================
+# Assembly
+# ==============================================================================
+asm/**/*.s   text eol=lf linguist-language=Assembly
+asm/**/*.S   text eol=lf linguist-language=Assembly
+asm/**/*.asm text eol=lf linguist-language=Assembly
+
+# C headers for assembly (ABI surface)
+asm/**/*.h   text eol=lf linguist-language=C
+
+# ==============================================================================
+# Go
+# ==============================================================================
+go/**/*.go text eol=lf linguist-language=Go
+
+# ==============================================================================
+# Python
+# ==============================================================================
+python/**/*.py text eol=lf linguist-language=Python
+
+# ==============================================================================
+# Rust
+# ==============================================================================
+rust/**/*.rs text eol=lf linguist-language=Rust
+
+# ==============================================================================
+# TypeScript
+# ==============================================================================
+ts/**/*.ts text eol=lf linguist-language=TypeScript
+
+# ==============================================================================
+# Java
+# ==============================================================================
+java/**/*.java text eol=lf linguist-language=Java
+
+# ==============================================================================
+# Haskell
+# ==============================================================================
+haskell/**/* text linguist-language=Haskell
+
+# ==============================================================================
+# Markdown / docs
+# ==============================================================================
+*.md text linguist-language=Markdown
+
+# ==============================================================================
+# Build & config files
+# ==============================================================================
+CMakeLists.txt text eol=lf linguist-language=CMake
+*.cmake        text eol=lf linguist-language=CMake
+*.toml         text eol=lf
+*.json         text eol=lf
+*.yml          text eol=lf
+*.yaml         text eol=lf
+
+# ==============================================================================
+# Generated / lock files (GitHub UI only)
+# ==============================================================================
+package-lock.json linguist-generated=true
+Cargo.lock        linguist-generated=true
+uv.lock           linguist-generated=true
+
+# hide test code from language stats
+**/tests/** linguist-generated=true
+
+# ==============================================================================
+# Binary files (never touch line endings)
+# ==============================================================================
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.tar  binary
+*.gz   binary
+*.exe  binary
+*.dll  binary
