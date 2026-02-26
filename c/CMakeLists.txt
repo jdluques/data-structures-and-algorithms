@@ -17,4 +17,4 @@ target_include_directories(project_includes INTERFACE
     ${PROJECT_SOURCE_DIR}/include
 )
 
-add_subdirectory(src/linked_lists)
+add_subdirectory(src)
