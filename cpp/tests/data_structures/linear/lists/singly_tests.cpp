@@ -1,11 +1,12 @@
+#include "data_structures/linear/lists/singly.hpp"
+
 #include <catch2/catch_test_macros.hpp>
+
 #include <stdexcept>
 #include <string>
 
-#include "../list.hpp"
-
 TEST_CASE("Default construction", "[constructor]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
 
     REQUIRE(list.size() == 0);
     REQUIRE(list.empty());
@@ -13,7 +14,7 @@ TEST_CASE("Default construction", "[constructor]") {
 }
 
 TEST_CASE("push_front", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
 
     list.push_front(1);
     REQUIRE(list.size() == 1);
@@ -27,7 +28,7 @@ TEST_CASE("push_front", "[modifiers]") {
 }
 
 TEST_CASE("push_back", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
 
     list.push_back(1);
     list.push_back(2);
@@ -39,7 +40,7 @@ TEST_CASE("push_back", "[modifiers]") {
 }
 
 TEST_CASE("pop_front", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
 
@@ -54,7 +55,7 @@ TEST_CASE("pop_front", "[modifiers]") {
 }
 
 TEST_CASE("pop_back", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
     list.push_back(3);
@@ -71,7 +72,7 @@ TEST_CASE("pop_back", "[modifiers]") {
 }
 
 TEST_CASE("insert at positions", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(3);
 
@@ -85,7 +86,7 @@ TEST_CASE("insert at positions", "[modifiers]") {
 }
 
 TEST_CASE("erase at positions", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
     list.push_back(3);
@@ -102,7 +103,7 @@ TEST_CASE("erase at positions", "[modifiers]") {
 }
 
 TEST_CASE("element access: front, back, at, operator[]", "[access]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(10);
     list.push_back(20);
 
@@ -116,20 +117,20 @@ TEST_CASE("element access: front, back, at, operator[]", "[access]") {
 }
 
 TEST_CASE("find", "[search]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
     list.push_back(3);
 
     auto* node = list.find(2);
     REQUIRE(node != nullptr);
-    REQUIRE(node->value == 2);
+    REQUIRE(node->value_ == 2);
 
     REQUIRE(list.find(42) == nullptr);
 }
 
 TEST_CASE("iterators traversal", "[iterators]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     for (int i = 1; i <= 5; ++i) list.push_back(i);
 
     int expected = 1;
@@ -139,7 +140,7 @@ TEST_CASE("iterators traversal", "[iterators]") {
 }
 
 TEST_CASE("const_iterators traversal", "[iterators][const]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
 
@@ -154,11 +155,11 @@ TEST_CASE("const_iterators traversal", "[iterators][const]") {
 }
 
 TEST_CASE("copy constructor creates deep copy", "[copy]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
 
-    SinglyLinkedList<int> copy(list);
+    ds::SinglyLinkedList<int> copy(list);
     copy.push_back(3);
 
     REQUIRE(list.size() == 2);
@@ -166,11 +167,11 @@ TEST_CASE("copy constructor creates deep copy", "[copy]") {
 }
 
 TEST_CASE("copy assignment creates deep copy", "[copy]") {
-    SinglyLinkedList<int> a;
+    ds::SinglyLinkedList<int> a;
     a.push_back(1);
     a.push_back(2);
 
-    SinglyLinkedList<int> b;
+    ds::SinglyLinkedList<int> b;
     b = a;
     b.push_back(3);
 
@@ -179,22 +180,22 @@ TEST_CASE("copy assignment creates deep copy", "[copy]") {
 }
 
 TEST_CASE("move constructor", "[move]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
 
-    SinglyLinkedList<int> moved(std::move(list));
+    ds::SinglyLinkedList<int> moved(std::move(list));
 
     REQUIRE(moved.size() == 2);
     REQUIRE(list.empty());
 }
 
 TEST_CASE("move assignment", "[move]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
 
-    SinglyLinkedList<int> other;
+    ds::SinglyLinkedList<int> other;
     other = std::move(list);
 
     REQUIRE(other.size() == 2);
@@ -202,7 +203,7 @@ TEST_CASE("move assignment", "[move]") {
 }
 
 TEST_CASE("clear removes all elements", "[modifiers]") {
-    SinglyLinkedList<int> list;
+    ds::SinglyLinkedList<int> list;
     list.push_back(1);
     list.push_back(2);
 
@@ -212,11 +213,10 @@ TEST_CASE("clear removes all elements", "[modifiers]") {
 }
 
 TEST_CASE("works with non-trivial types", "[templates]") {
-    SinglyLinkedList<std::string> list;
+    ds::SinglyLinkedList<std::string> list;
     list.push_back("hello");
     list.push_back("world");
 
     REQUIRE(list.front() == "hello");
     REQUIRE(list.back() == "world");
 }
-

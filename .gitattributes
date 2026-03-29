@@ -21,7 +21,7 @@ cpp/**/*.hpp text eol=lf linguist-language=C++
 cpp/**/*.h   text eol=lf linguist-language=C++
 
 # Inline / template implementation files
-cpp/**/*.inl text eol=lf linguist-language=C++
+cpp/**/*.tpp text eol=lf linguist-language=C++
 
 # ==============================================================================
 # Assembly

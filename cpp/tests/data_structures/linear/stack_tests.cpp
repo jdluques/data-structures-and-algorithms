@@ -1,19 +1,20 @@
+#include "data_structures/linear/stack.hpp"
+
 #include <catch2/catch_test_macros.hpp>
+
 #include <stdexcept>
 #include <string>
 #include <utility>
 
-#include "../stack.hpp"
-
 TEST_CASE("Default construction", "[constructor]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
 
     REQUIRE(stack.size() == 0);
     REQUIRE(stack.empty());
 }
 
-TEST_CASE("push(const T&) and top", "[modifiers]") {
-    Stack<int> stack;
+TEST_CASE("push(T const&) and top", "[modifiers]") {
+    ds::Stack<int> stack;
 
     stack.push(1);
     REQUIRE(stack.size() == 1);
@@ -25,7 +26,7 @@ TEST_CASE("push(const T&) and top", "[modifiers]") {
 }
 
 TEST_CASE("push(T&&) moves value", "[modifiers][move]") {
-    Stack<std::string> stack;
+    ds::Stack<std::string> stack;
 
     std::string s = "hello";
     stack.push(std::move(s));
@@ -35,7 +36,7 @@ TEST_CASE("push(T&&) moves value", "[modifiers][move]") {
 }
 
 TEST_CASE("emplace constructs in place", "[modifiers][emplace]") {
-    Stack<std::string> stack;
+    ds::Stack<std::string> stack;
 
     stack.emplace(5, 'a'); // "aaaaa"
     REQUIRE(stack.size() == 1);
@@ -43,7 +44,7 @@ TEST_CASE("emplace constructs in place", "[modifiers][emplace]") {
 }
 
 TEST_CASE("pop removes and returns top element", "[modifiers]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     stack.push(1);
     stack.push(2);
 
@@ -54,25 +55,25 @@ TEST_CASE("pop removes and returns top element", "[modifiers]") {
 }
 
 TEST_CASE("pop on empty stack throws", "[modifiers][exceptions]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     REQUIRE_THROWS_AS(stack.pop(), std::out_of_range);
 }
 
 TEST_CASE("top on empty stack throws", "[access][exceptions]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     REQUIRE_THROWS_AS(stack.top(), std::out_of_range);
 }
 
 TEST_CASE("const top access", "[access][const]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     stack.push(42);
 
-    const Stack<int>& cstack = stack;
+    const ds::Stack<int>& cstack = stack;
     REQUIRE(cstack.top() == 42);
 }
 
 TEST_CASE("clear removes all elements", "[modifiers]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     stack.push(1);
     stack.push(2);
 
@@ -82,8 +83,8 @@ TEST_CASE("clear removes all elements", "[modifiers]") {
 }
 
 TEST_CASE("operator== and operator!=", "[operators]") {
-    Stack<int> a;
-    Stack<int> b;
+    ds::Stack<int> a;
+    ds::Stack<int> b;
 
     a.push(1);
     a.push(2);
@@ -99,11 +100,11 @@ TEST_CASE("operator== and operator!=", "[operators]") {
 }
 
 TEST_CASE("copy constructor creates deep copy", "[copy]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     stack.push(1);
     stack.push(2);
 
-    Stack<int> copy(stack);
+    ds::Stack<int> copy(stack);
     copy.push(3);
 
     REQUIRE(stack.size() == 2);
@@ -113,11 +114,11 @@ TEST_CASE("copy constructor creates deep copy", "[copy]") {
 }
 
 TEST_CASE("copy assignment creates deep copy", "[copy]") {
-    Stack<int> a;
+    ds::Stack<int> a;
     a.push(1);
     a.push(2);
 
-    Stack<int> b;
+    ds::Stack<int> b;
     b = a;
     b.push(3);
 
@@ -126,11 +127,11 @@ TEST_CASE("copy assignment creates deep copy", "[copy]") {
 }
 
 TEST_CASE("move constructor transfers ownership", "[move]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     stack.push(1);
     stack.push(2);
 
-    Stack<int> moved(std::move(stack));
+    ds::Stack<int> moved(std::move(stack));
 
     REQUIRE(moved.size() == 2);
     REQUIRE(moved.top() == 2);
@@ -138,11 +139,11 @@ TEST_CASE("move constructor transfers ownership", "[move]") {
 }
 
 TEST_CASE("move assignment transfers ownership", "[move]") {
-    Stack<int> stack;
+    ds::Stack<int> stack;
     stack.push(1);
     stack.push(2);
 
-    Stack<int> other;
+    ds::Stack<int> other;
     other = std::move(stack);
 
     REQUIRE(other.size() == 2);
@@ -151,8 +152,8 @@ TEST_CASE("move assignment transfers ownership", "[move]") {
 }
 
 TEST_CASE("swap exchanges contents", "[swap]") {
-    Stack<int> a;
-    Stack<int> b;
+    ds::Stack<int> a;
+    ds::Stack<int> b;
 
     a.push(1);
     a.push(2);
@@ -168,8 +169,8 @@ TEST_CASE("swap exchanges contents", "[swap]") {
 }
 
 TEST_CASE("free swap works (ADL)", "[swap]") {
-    Stack<int> a;
-    Stack<int> b;
+    ds::Stack<int> a;
+    ds::Stack<int> b;
 
     a.push(1);
     b.push(2);
@@ -182,7 +183,7 @@ TEST_CASE("free swap works (ADL)", "[swap]") {
 }
 
 TEST_CASE("works with non-trivial types", "[templates]") {
-    Stack<std::string> stack;
+    ds::Stack<std::string> stack;
 
     stack.push("hello");
     stack.push("world");
