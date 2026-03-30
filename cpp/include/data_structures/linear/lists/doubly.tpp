@@ -180,7 +180,7 @@ namespace ds {
 
     template <typename T>
     void ds::DoublyLinkedList<T>::insert(T const& value, std::size_t pos) {
-        if (pos >= size()) throw std::out_of_range("insert pos out of range");
+        if (pos > size()) throw std::out_of_range("insert pos out of range");
 
         if (pos == 0) this->push_front(value);
         else if (pos == size()) this->push_back(value);
@@ -277,7 +277,7 @@ namespace ds {
         Node* curr = dummy;
 
         while (head1 && head2) {
-            if (head1->value_ <= head2->data) {
+            if (head1->value_ <= head2->value_) {
                 curr->next_ = head1;
                 head1 = head1->next_;
             } else {
