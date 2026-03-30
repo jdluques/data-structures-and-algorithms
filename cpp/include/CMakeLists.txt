@@ -1,1 +1,2 @@
 add_subdirectory(data_structures/linear)
+add_subdirectory(data_structures/trees)
