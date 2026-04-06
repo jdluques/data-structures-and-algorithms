@@ -8,3 +8,7 @@ target_link_libraries(lists_doubly PUBLIC project_includes)
 # Stack
 add_library(stack stack.c)
 target_link_libraries(stack PUBLIC project_includes)
+
+# Queue
+add_library(queue queue.c)
+target_link_libraries(queue PUBLIC project_includes)
