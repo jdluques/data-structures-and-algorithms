@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "data_structures/linear/stack.h"
 
 #include <stdlib.h>
 

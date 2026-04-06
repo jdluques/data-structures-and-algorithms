@@ -1,4 +1,4 @@
-#include "linked_lists/singly.h"
+#include "data_structures/linear/lists/singly.h"
 
 #include <stdlib.h>
 

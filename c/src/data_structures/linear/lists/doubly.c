@@ -1,4 +1,4 @@
-#include "linked_lists/doubly.h"
+#include "data_structures/linear/lists/doubly.h"
 
 #include <stdlib.h>
 
