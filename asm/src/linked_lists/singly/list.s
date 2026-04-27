@@ -11,34 +11,44 @@
 
 
 singly_list_new:
-    push 	rbp
-    mov 	rbp, rsp
+    push	rbp
+    mov	rbp, rsp
 
-    mov 	rdi, SinglyLinkedList_size
+    push	rbx
+    sub	rsp, 8
+
+    mov	rdi, SinglyLinkedList_size
     call	malloc
 
-    test 	rax, rax
-    je		.fail
+    test	rax, rax
+    je	.fail
 
-	mov		rbx, rax
+    mov	rbx, rax
 
-	xor 	rdi, rdi
-	xor		rsi, rsi
-	call 	node_new
+    xor	rdi, rdi
+    xor	rsi, rsi
+    call	node_new
 
-	test	rax, rax
-	je		.fail
+    test	rax, rax
+    je	.fail
 
-	mov		[rbx + SinglyLinkedList.sentinel_], rax
-	mov		[rbx + SinglyLinkedList.tail_], rax
-	mov		qword [rbx + SinglyLinkedList.size_], 0
+    mov	[rbx + SinglyLinkedList.sentinel_], rax
+    mov	[rbx + SinglyLinkedList.tail_], rax
+    mov	qword [rbx + SinglyLinkedList.size_], 0
 
-	mov		rax, rbx
+    mov	rax, rbx
 
-	leave
-	ret
+    add	rsp, 8
+    pop	rbx
+    
+    leave
+    ret
 
 .fail:
     xor eax, eax
+    
+    add	rsp, 8
+    pop	rbx
+
     leave
     ret

@@ -13,15 +13,17 @@ node_new:
     mov 	rbp, rsp
 
     push 	rdi
+    push	rsi
 
     mov 	rdi, Node_size
     call 	malloc
 
-    test 	rax, rax
-    je		.fail
-
+    pop		rsi
     pop 	rdi
 
+    test 	rax, rax
+    je		.fail
+ 
     mov		[rax + Node.value_], rdi
     mov 	[rax + Node.next_], rsi
 
