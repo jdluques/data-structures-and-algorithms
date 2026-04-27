@@ -1,39 +1,34 @@
 .intel_syntax noprefix
 .text
+.globl node_new
+.extern malloc
 
-; System V AMD64 ABI
-; rdi, rsi, rdx, rcx, r8, r9
-; return in rax
-
-; struct Node
-; 0  : void* value_
-; 8  : Node* next_
-
-; struct SinglyLinkedList
-; 0  : Node* sentinel_
-; 8  : Node* tail_
-; 16 : size_t size_
+struc Node
+    .value_: resq 1
+    .next_:  resq 1
+endstruc
 
 node_new:
-    push rbp
-    mov rbp, rsp
+    push 	rbp
+    mov 	rbp, rsp
 
-    ; rdi = value_
-    ; rsi = next_
+    push 	rdi
 
-    ; malloc(sizeof(Node)) = 16
-    mov rdi, 16
-    call malloc
+    mov 	rdi, Node_size
+    call 	malloc
 
-    test rax, rax
-    je .fail
+    test 	rax, rax
+    je		.fail
 
-    mov [rax], rdi	; value_
-    mov [rax + 1], rsi	; next_
+    pop 	rdi
+
+    mov		[rax + Node.value_], rdi
+    mov 	[rax + Node.next_], rsi
 
     leave
     ret
 
-.fail
-    xor rax, rax
-    leave ret
+.fail:
+    xor 	eax, eax
+    leave
+    ret
