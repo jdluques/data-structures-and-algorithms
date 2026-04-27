@@ -1,5 +1,6 @@
 add_library(asm_singly_list
     singly/node.s
+    singly/list.s
 )
 
 target_link_libraries(asm_singly_list
