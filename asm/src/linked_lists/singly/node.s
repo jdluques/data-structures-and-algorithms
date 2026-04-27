@@ -1,12 +1,12 @@
-.intel_syntax noprefix
-.text
-.globl node_new
-.extern malloc
+%include "../../../include/linked_lists/singly.inc"
 
-struc Node
-    .value_: resq 1
-    .next_:  resq 1
-endstruc
+.intel_syntax noprefix
+
+.text
+
+.globl node_new
+
+.extern malloc
 
 node_new:
     push 	rbp

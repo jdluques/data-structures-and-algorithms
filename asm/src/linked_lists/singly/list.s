@@ -1,14 +1,14 @@
+%include "../../../include/linked_lists/singly.inc"
+
 .intel_syntax noprefix
+
 .text
+
 .globl singly_list_new
+
 .extern malloc
 .extern node_new
 
-struc SinglyLinkedList
-   .sentinel_:  resq 1
-   .tail_:		resq 1
-   .size_:		resq 1
-endstruc
 
 singly_list_new:
     push 	rbp
