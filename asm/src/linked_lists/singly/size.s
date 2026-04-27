@@ -8,15 +8,15 @@
 .globl empty
 
 size:
-	mov 	rax, qword [rdi + SinglyLinkedList.size_]
+    mov	rax, qword [rdi + SinglyLinkedList.size_]
 
-	ret
+    ret
 
 empty:
-	mov		rax, [rdi + SinglyLinkedList.size_]
+    mov	rax, [rdi + SinglyLinkedList.size_]
 
-	test	rax, rax
-	setz	al
-	movzx	rax, al
+    test	rax, rax
+    setz	al
+    movzx	rax, al
 
-	ret
+    ret
