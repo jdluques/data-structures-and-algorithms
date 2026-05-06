@@ -4,16 +4,24 @@
 
 Node* node_new(void* value, Node* next) {
     Node* new_node = malloc(sizeof(Node));
+    if (!new_node) return NULL;
+
     new_node->value_ = value;
     new_node->next_ = next;
+
     return new_node;
 }
 
 
 SinglyLinkedList* singly_list_new() {
     SinglyLinkedList* new_list = malloc(sizeof(SinglyLinkedList));
+    if (!new_list) return NULL;
 
     Node* sentinel = node_new(NULL, NULL);
+    if (!sentinel) {
+        free(new_list);
+        return NULL;
+    }
 
     new_list->sentinel_ = sentinel;
     new_list->tail_ = sentinel;
@@ -60,6 +68,8 @@ Node* search(SinglyLinkedList* list, void* value) {
 
 void push_front(SinglyLinkedList* list, void* value) {
     Node* new_node = node_new(value, list->sentinel_->next_);
+    if (!new_node) return;
+    
     list->sentinel_->next_ = new_node;
 
     if (list->size_ == 0) list->tail_ = new_node;
@@ -69,7 +79,8 @@ void push_front(SinglyLinkedList* list, void* value) {
 
 void push_back(SinglyLinkedList* list, void* value) {
     Node *new_node = node_new(value, NULL);
-    
+    if (!new_node) return;
+
     if (list->tail_) list->tail_->next_ = new_node;
     else list->sentinel_->next_ = new_node;
     list->tail_ = new_node;
@@ -87,6 +98,8 @@ void insert(SinglyLinkedList* list, size_t pos, void* value) {
         while (pos--) curr = curr->next_;
 
         Node* new_node = node_new(value, curr->next_);
+        if (!new_node) return;
+
         curr->next_ = new_node;
 
         list->size_++;
@@ -164,6 +177,8 @@ Node* find_middle(Node* head) {
 
 Node* merge_helper(Node* head_1, Node* head_2) {
     Node* dummy = node_new(NULL, NULL);
+    if (!dummy) return NULL;
+
     Node* curr = dummy;
 
     while (head_1 && head_2) {
@@ -206,6 +221,8 @@ SinglyLinkedList* merge(SinglyLinkedList* list_1, SinglyLinkedList* list_2) {
     if (is_empty(list_1) && !is_empty(list_2)) return list_2;
 
     SinglyLinkedList* new_list = malloc(sizeof(SinglyLinkedList));
+    if (!new_list) return NULL;
+
     new_list->sentinel_ = list_1->sentinel_;
     new_list->tail_ = list_2->tail_;
     new_list->size_ = list_1->size_ + list_2->size_;

@@ -4,11 +4,16 @@
 
 Stack* stack_new(size_t capacity) {
     Stack* stack = malloc(sizeof(Stack));
+    if (!stack) return NULL;
 
     stack->size_ = 0;
     stack->capacity_ = capacity;
     stack->data_ = calloc(capacity, sizeof(void*));
-    
+    if (!stack->data_) {
+        free(stack);
+        return NULL;
+    }
+
     return stack;
 }
 
@@ -35,6 +40,8 @@ void push(Stack* stack, void* element) {
         stack->capacity_ *= 2;
         
         void** new_data = malloc(sizeof(void*)*stack->capacity_);
+        if (!new_data) return;
+
         for (size_t i = 0; i < stack->size_; i++) new_data[i] = stack->data_[i];
         for (size_t i = stack->size_; i < stack->capacity_; i++) new_data[i] = NULL;
 

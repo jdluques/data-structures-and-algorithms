@@ -4,12 +4,17 @@
 
 Queue* queue_new(size_t capacity) {
     Queue* queue = malloc(sizeof(Queue));
+    if (!queue) return NULL;
 
     queue->size_ = 0;
     queue->capacity_ = capacity;
     queue->head_ = 0;
     queue->tail_ = 0;
     queue->data_ = calloc(capacity, sizeof(void*));
+    if (!queue->data_) {
+        free(queue);
+        return NULL;
+    }
 
     return queue;
 }
@@ -38,7 +43,8 @@ void* front(Queue* queue) {
 
 void enqueue(Queue* queue, void* element) {
     if (((queue->tail_+1) % queue->capacity_) == queue->head_) {
-        void** new_data = malloc(sizeof(void*) * (queue->capacity_*2));
+        void** new_data = malloc(sizeof(void *) * (queue->capacity_*2));
+        if (!new_data) return;
 
         for (size_t i = 0, j = queue->head_;
                 i < queue->size_;

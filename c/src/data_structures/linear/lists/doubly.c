@@ -4,18 +4,33 @@
 
 Node* node_new(void* value, Node* next, Node* prev) {
     Node* new_node = malloc(sizeof(Node));
+    if (!new_node) return NULL;
+
     new_node->value_ = value;
     new_node->next_ = next;
     new_node->prev_ = prev;
+    
     return new_node;
 }
 
 
 DoublyLinkedList* doubly_list_new() {
     DoublyLinkedList* new_list = malloc(sizeof(DoublyLinkedList));
+    if (!new_list) return NULL;
 
     Node* head_sentinel = node_new(NULL, NULL, NULL);
+    if (!head_sentinel) {
+        free(new_list);
+        return NULL;
+    }
+
     Node* tail_sentinel = node_new(NULL, NULL, head_sentinel);
+    if (!tail_sentinel) {
+        free(new_list);
+        free(head_sentinel);
+        return NULL;
+    }
+
     head_sentinel->next_ = tail_sentinel;
 
     new_list->head_ = head_sentinel;
@@ -70,6 +85,8 @@ Node* search(DoublyLinkedList* list, void* value) {
 
 void push_front(DoublyLinkedList* list, void* value) {
     Node* new_node = node_new(value, list->head_->next_, list->head_);
+    if (!new_node) return;
+
     list->head_->next_ = new_node;
 
     if (list->size_ == 0) list->tail_->prev_ = new_node;
@@ -79,6 +96,8 @@ void push_front(DoublyLinkedList* list, void* value) {
 
 void push_back(DoublyLinkedList* list, void* value) {
     Node *new_node = node_new(value, list->tail_, list->tail_->prev_); 
+    if (!new_node) return;
+
     list->tail_->prev_ = new_node;
 
     if (list->size_ == 0) list->head_->next_ = new_node;
@@ -103,6 +122,8 @@ void insert(DoublyLinkedList* list, size_t pos, void* value) {
         }
 
         Node* new_node = node_new(value, curr->next_, curr);
+        if (!new_node) return;
+
         curr->next_ = new_node;
         new_node->next_->prev_ = new_node;
 
@@ -186,6 +207,8 @@ Node* find_middle(Node* head) {
 
 Node* merge_helper(Node* head_1, Node* head_2) {
     Node* dummy = node_new(NULL, NULL, NULL);
+    if (!dummy) return NULL;
+
     Node* curr = dummy;
 
     while (head_1 && head_2) {
@@ -238,6 +261,8 @@ DoublyLinkedList* merge(DoublyLinkedList* list_1, DoublyLinkedList* list_2) {
     if (is_empty(list_1) && !is_empty(list_2)) return list_2;
 
     DoublyLinkedList* new_list = malloc(sizeof(DoublyLinkedList));
+    if (!new_list) return NULL;
+
     new_list->head_ = list_1->head_;
     new_list->tail_ = list_2->tail_;
     new_list->size_ = list_1->size_ + list_2->size_;
